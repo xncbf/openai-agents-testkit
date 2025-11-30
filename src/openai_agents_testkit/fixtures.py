@@ -36,6 +36,7 @@ def pytest_configure(config: pytest.Config) -> None:
     del config  # unused but required by pytest hook signature
     set_tracing_disabled(True)
 
+
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator
 
