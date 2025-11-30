@@ -20,8 +20,21 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import pytest
+from agents.tracing import set_tracing_disabled
 
 from openai_agents_testkit.models import FakeModel, FakeModelProvider
+
+
+def pytest_configure(config: pytest.Config) -> None:
+    """Disable OpenAI agents tracing when testkit is loaded.
+
+    Tracing is a separate telemetry subsystem that sends data to OpenAI's API.
+    FakeModelProvider only mocks LLM API calls, not tracing calls.
+    This hook ensures tracing is disabled before any tests run,
+    preventing 401 errors from invalid API keys in test environments.
+    """
+    del config  # unused but required by pytest hook signature
+    set_tracing_disabled(True)
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Generator
